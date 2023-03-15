@@ -1,0 +1,528 @@
+Fold 0
+Fold 0
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 3,
+ 'dropout': 0.05,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 2100,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 5,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_3_dropout_0.05_ffn_num_layers_2_hidden_size_2100/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 3,
+ 'dropout': 0.05,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 2100,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 5,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_3_dropout_0.05_ffn_num_layers_2_hidden_size_2100/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+Loading data
+Number of tasks = 1
+Number of tasks = 1
+Splitting data with seed 5
+Splitting data with seed 5
+Total size = 8,472 | train size = 8,472 | val size = 381 | test size = 373
+Total size = 8,472 | train size = 8,472 | val size = 381 | test size = 373
+Fitting scaler
+Fitting scaler
+Building model 0
+Building model 0
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.05, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=2100, bias=False)
+      (W_h): Linear(in_features=2100, out_features=2100, bias=False)
+      (W_o): Linear(in_features=2233, out_features=2100, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.05, inplace=False)
+    (1): Linear(in_features=2126, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.05, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.05, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=2100, bias=False)
+      (W_h): Linear(in_features=2100, out_features=2100, bias=False)
+      (W_o): Linear(in_features=2233, out_features=2100, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.05, inplace=False)
+    (1): Linear(in_features=2126, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.05, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+Number of parameters = 10,048,501
+Number of parameters = 10,048,501
+Epoch 0
+Epoch 0
+Fold 0
+Fold 0
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 4,
+ 'dropout': 0.4,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 500,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 5,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_4_dropout_0.4_ffn_num_layers_2_hidden_size_500/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 4,
+ 'dropout': 0.4,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 500,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 5,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_4_dropout_0.4_ffn_num_layers_2_hidden_size_500/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+Loading data
+Number of tasks = 1
+Number of tasks = 1
+Splitting data with seed 5
+Splitting data with seed 5
+Total size = 8,474 | train size = 8,474 | val size = 375 | test size = 377
+Total size = 8,474 | train size = 8,474 | val size = 375 | test size = 377
+Fitting scaler
+Fitting scaler
+Building model 0
+Building model 0
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.4, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=500, bias=False)
+      (W_h): Linear(in_features=500, out_features=500, bias=False)
+      (W_o): Linear(in_features=633, out_features=500, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.4, inplace=False)
+    (1): Linear(in_features=526, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.4, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.4, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=500, bias=False)
+      (W_h): Linear(in_features=500, out_features=500, bias=False)
+      (W_o): Linear(in_features=633, out_features=500, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.4, inplace=False)
+    (1): Linear(in_features=526, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.4, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+Number of parameters = 798,901
+Number of parameters = 798,901
+Epoch 0
+Epoch 0
+Loss = 2.4422e-02, PNorm = 40.8593, GNorm = 3.7045, lr_0 = 1.2929e-04
+Loss = 2.4422e-02, PNorm = 40.8593, GNorm = 3.7045, lr_0 = 1.2929e-04
+Loss = 1.8676e-02, PNorm = 40.8602, GNorm = 5.5667, lr_0 = 1.5592e-04
+Loss = 1.8676e-02, PNorm = 40.8602, GNorm = 5.5667, lr_0 = 1.5592e-04
+Loss = 1.7820e-02, PNorm = 40.8623, GNorm = 3.5864, lr_0 = 1.8254e-04
+Loss = 1.7820e-02, PNorm = 40.8623, GNorm = 3.5864, lr_0 = 1.8254e-04
+Loss = 1.1896e-02, PNorm = 40.8650, GNorm = 2.1745, lr_0 = 2.0917e-04
+Loss = 1.1896e-02, PNorm = 40.8650, GNorm = 2.1745, lr_0 = 2.0917e-04
+Loss = 1.2099e-02, PNorm = 40.8668, GNorm = 7.9462, lr_0 = 2.3580e-04
+Loss = 1.2099e-02, PNorm = 40.8668, GNorm = 7.9462, lr_0 = 2.3580e-04
+Loss = 1.4756e-02, PNorm = 40.8693, GNorm = 2.3299, lr_0 = 2.6243e-04
+Loss = 1.4756e-02, PNorm = 40.8693, GNorm = 2.3299, lr_0 = 2.6243e-04
+Loss = 1.4934e-02, PNorm = 40.8727, GNorm = 2.7292, lr_0 = 2.8905e-04
+Loss = 1.4934e-02, PNorm = 40.8727, GNorm = 2.7292, lr_0 = 2.8905e-04
+Loss = 1.0984e-02, PNorm = 40.8766, GNorm = 2.3190, lr_0 = 3.1568e-04
+Loss = 1.0984e-02, PNorm = 40.8766, GNorm = 2.3190, lr_0 = 3.1568e-04
+Loss = 1.1930e-02, PNorm = 40.8800, GNorm = 10.2775, lr_0 = 3.4231e-04
+Loss = 1.1930e-02, PNorm = 40.8800, GNorm = 10.2775, lr_0 = 3.4231e-04
+Loss = 1.2246e-02, PNorm = 40.8843, GNorm = 1.6213, lr_0 = 3.6893e-04
+Loss = 1.2246e-02, PNorm = 40.8843, GNorm = 1.6213, lr_0 = 3.6893e-04
+Loss = 1.0846e-02, PNorm = 40.8889, GNorm = 7.3077, lr_0 = 3.9556e-04
+Loss = 1.0846e-02, PNorm = 40.8889, GNorm = 7.3077, lr_0 = 3.9556e-04
+Fold 0
+Fold 0
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs.json',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 3,
+ 'dropout': 0.25,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 1,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 400,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 20,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_3_dropout_0.25_ffn_num_layers_1_hidden_size_400/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'config_save_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/optimized_configs.json',
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 3,
+ 'dropout': 0.25,
+ 'ensemble_size': 1,
+ 'epochs': 50,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 1,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 400,
+ 'init_lr': 0.0001,
+ 'log_dir': None,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_iters': 20,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/hyperopt/depth_3_dropout_0.25_ffn_num_layers_1_hidden_size_400/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Ubermodel_split_hyperopt/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+Loading data
+Number of tasks = 1
+Number of tasks = 1
+Splitting data with seed 5
+Splitting data with seed 5
+Total size = 8,463 | train size = 8,463 | val size = 438 | test size = 325
+Total size = 8,463 | train size = 8,463 | val size = 438 | test size = 325
+Fitting scaler
+Fitting scaler
+Building model 0
+Building model 0
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.25, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=400, bias=False)
+      (W_h): Linear(in_features=400, out_features=400, bias=False)
+      (W_o): Linear(in_features=533, out_features=400, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.25, inplace=False)
+    (1): Linear(in_features=426, out_features=1, bias=True)
+  )
+)
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.25, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=400, bias=False)
+      (W_h): Linear(in_features=400, out_features=400, bias=False)
+      (W_o): Linear(in_features=533, out_features=400, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.25, inplace=False)
+    (1): Linear(in_features=426, out_features=1, bias=True)
+  )
+)
+Number of parameters = 432,827
+Number of parameters = 432,827
+Epoch 0
+Epoch 0
+Loss = 2.6153e-02, PNorm = 32.8364, GNorm = 2.5366, lr_0 = 1.2929e-04
+Loss = 2.6153e-02, PNorm = 32.8364, GNorm = 2.5366, lr_0 = 1.2929e-04

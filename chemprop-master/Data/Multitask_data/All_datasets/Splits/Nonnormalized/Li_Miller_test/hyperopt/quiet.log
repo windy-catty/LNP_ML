@@ -1,0 +1,70 @@
+Fold 0
+Fold 0
+Model 0 best validation rmse = 3.067294 on epoch 4
+Model 0 best validation rmse = 3.067294 on epoch 4
+Model 0 test rmse = 1.949357
+Model 0 test rmse = 1.949357
+Ensemble test rmse = 1.949357
+Ensemble test rmse = 1.949357
+1-fold cross validation
+1-fold cross validation
+Seed 5 ==> test rmse = 1.949357
+Seed 5 ==> test rmse = 1.949357
+Overall test rmse = 1.949357 +/- 0.000000
+Overall test rmse = 1.949357 +/- 0.000000
+Fold 0
+Fold 0
+Model 0 best validation rmse = 3.067686 on epoch 2
+Model 0 best validation rmse = 3.067686 on epoch 2
+Model 0 test rmse = 1.970693
+Model 0 test rmse = 1.970693
+Ensemble test rmse = 1.970693
+Ensemble test rmse = 1.970693
+1-fold cross validation
+1-fold cross validation
+Seed 5 ==> test rmse = 1.970693
+Seed 5 ==> test rmse = 1.970693
+Overall test rmse = 1.970693 +/- 0.000000
+Overall test rmse = 1.970693 +/- 0.000000
+Fold 0
+Fold 0
+Model 0 best validation rmse = 3.053154 on epoch 0
+Model 0 best validation rmse = 3.053154 on epoch 0
+Model 0 test rmse = 2.004251
+Model 0 test rmse = 2.004251
+Ensemble test rmse = 2.004251
+Ensemble test rmse = 2.004251
+1-fold cross validation
+1-fold cross validation
+Seed 5 ==> test rmse = 2.004251
+Seed 5 ==> test rmse = 2.004251
+Overall test rmse = 2.004251 +/- 0.000000
+Overall test rmse = 2.004251 +/- 0.000000
+Fold 0
+Fold 0
+Model 0 best validation rmse = 3.086503 on epoch 5
+Model 0 best validation rmse = 3.086503 on epoch 5
+Model 0 test rmse = 1.924863
+Model 0 test rmse = 1.924863
+Ensemble test rmse = 1.924863
+Ensemble test rmse = 1.924863
+1-fold cross validation
+1-fold cross validation
+Seed 5 ==> test rmse = 1.924863
+Seed 5 ==> test rmse = 1.924863
+Overall test rmse = 1.924863 +/- 0.000000
+Overall test rmse = 1.924863 +/- 0.000000
+Fold 0
+Fold 0
+Model 0 best validation rmse = 3.058662 on epoch 2
+Model 0 best validation rmse = 3.058662 on epoch 2
+Model 0 test rmse = 1.979982
+Model 0 test rmse = 1.979982
+Ensemble test rmse = 1.979982
+Ensemble test rmse = 1.979982
+1-fold cross validation
+1-fold cross validation
+Seed 5 ==> test rmse = 1.979982
+Seed 5 ==> test rmse = 1.979982
+Overall test rmse = 1.979982 +/- 0.000000
+Overall test rmse = 1.979982 +/- 0.000000

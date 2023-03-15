@@ -1,0 +1,190 @@
+Fold 0
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 5,
+ 'dropout': 0.35000000000000003,
+ 'ensemble_size': 1,
+ 'epochs': 40,
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 1300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/trained_model/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+Number of tasks = 1
+Splitting data with seed 5
+Total size = 84 | train size = 84 | val size = 44 | test size = 56
+Fitting scaler
+Building model 0
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.35000000000000003, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=1300, bias=False)
+      (W_h): Linear(in_features=1300, out_features=1300, bias=False)
+      (W_o): Linear(in_features=1433, out_features=1300, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.35000000000000003, inplace=False)
+    (1): Linear(in_features=1343, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.35000000000000003, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+Number of parameters = 4,148,801
+Epoch 0
+Validation rmse = 5.144948
+Epoch 1
+Validation rmse = 3.153913
+Epoch 2
+Validation rmse = 3.082304
+Epoch 3
+Validation rmse = 3.088418
+Epoch 4
+Validation rmse = 3.110075
+Epoch 5
+Validation rmse = 3.159393
+Epoch 6
+Fold 0
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'cuda': False,
+ 'data_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/train.csv',
+ 'dataset_type': 'regression',
+ 'depth': 5,
+ 'dropout': 0.35000000000000003,
+ 'ensemble_size': 1,
+ 'epochs': 40,
+ 'features_generator': ['morgan_count'],
+ 'features_only': False,
+ 'features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/train_extra_x.csv'],
+ 'features_scaling': True,
+ 'ffn_hidden_size': 300,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 1300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'metric': 'rmse',
+ 'minimize_score': True,
+ 'multiclass_num_classes': 3,
+ 'no_cache': False,
+ 'num_folds': 1,
+ 'num_lrs': 1,
+ 'quiet': False,
+ 'save_dir': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/trained_model/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 5,
+ 'separate_test_features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/test_extra_x.csv'],
+ 'separate_test_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/test.csv',
+ 'separate_val_features_path': ['Data/Multitask_data/All_datasets/Splits/Li_Miller_test/valid_extra_x.csv'],
+ 'separate_val_path': 'Data/Multitask_data/All_datasets/Splits/Li_Miller_test/valid.csv',
+ 'show_individual_scores': False,
+ 'split_sizes': [0.675, 0.075, 0.25],
+ 'split_type': 'random',
+ 'test': False,
+ 'test_fold_index': None,
+ 'undirected': False,
+ 'use_compound_names': False,
+ 'use_input_features': ['morgan_count'],
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+Number of tasks = 1
+Splitting data with seed 5
+Total size = 84 | train size = 84 | val size = 44 | test size = 56
+Fitting scaler
+Building model 0
+MoleculeModel(
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.35000000000000003, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=1300, bias=False)
+      (W_h): Linear(in_features=1300, out_features=1300, bias=False)
+      (W_o): Linear(in_features=1433, out_features=1300, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.35000000000000003, inplace=False)
+    (1): Linear(in_features=3391, out_features=300, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.35000000000000003, inplace=False)
+    (4): Linear(in_features=300, out_features=1, bias=True)
+  )
+)
+Number of parameters = 4,763,201
+Epoch 0
+Validation rmse = 4.383400
+Epoch 1
+Validation rmse = 3.167084
+Epoch 2
+Validation rmse = 3.093281
+Epoch 3
+Validation rmse = 3.126782
+Epoch 4
+Validation rmse = 3.184042
+Epoch 5
+Validation rmse = 3.265338
+Epoch 6
+Validation rmse = 3.368495
+Epoch 7
