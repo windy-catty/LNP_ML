@@ -221,14 +221,9 @@ def split_df_by_col_type(df,col_types):
 	# Splits into 4 dataframes: y_vals, x_vals, sample_weights, metadata
 	y_vals_cols = col_types.Column_name[col_types.Type == 'Y_val']
 	x_vals_cols = col_types.Column_name[col_types.Type == 'X_val']
-	# print(x_vals_cols)
-	# print(df.columns)
 	xvals_df = df[x_vals_cols]
 	weight_cols = col_types.Column_name[col_types.Type == 'Sample_weight']
 	metadata_cols = col_types.Column_name[col_types.Type.isin(['Metadata','X_val_categorical'])]
-	# x_val_cat_cols = list(col_types.Column_name[col_types.Type == 'X_val_categorical'])
-	# xvals_df = pd.concat(([xvals_df] + [pd.get_dummies(df[col]) for col in x_val_cat_cols]),axis = 1)
-
 	return df[y_vals_cols],xvals_df,df[weight_cols],df[metadata_cols]
 
 def do_all_splits(path_to_splits = 'Data/Multitask_data/All_datasets/Split_specs'):
@@ -264,14 +259,16 @@ def train_valid_test_split(vals, train_frac, valid_frac, test_frac, random_state
 
 
 def split_for_cv(vals,cv_fold, held_out_fraction):
+	# randomly splits vals into cv_fold groups, plus held_out_fraction of vals are completely held out. So for example split_for_cv(vals,5,0.1) will hold out 10% of data and randomly put 18% into each of 5 folds
 	random.shuffle(vals)
 	held_out_vals = vals[:int(held_out_fraction*len(vals))]
 	cv_vals = vals[int(held_out_fraction*len(vals)):]
 	return [cv_vals[i::cv_fold] for i in range(cv_fold)],held_out_vals
 
 def specified_cv_split(split_spec_fname, path_to_folders = 'Data/Multitask_data/All_datasets', is_morgan = False, cv_fold = 5, ultra_held_out_fraction = -1.0, min_unique_vals = 2.0):
+	# Splits the dataset according to the specifications in split_spec_fname
 	# cv_fold: self-explanatory
-	# ultra_held_out_fraction: if you want to hold a dataset out from even the cross-validation datasets this is theway to do it
+	# ultra_held_out_fraction: if you want to hold a dataset out from even the cross-validation datasets this is the way to do it
 	all_df = pd.read_csv(path_to_folders + '/all_data.csv')
 	split_df = pd.read_csv(path_to_folders+'/crossval_split_specs/'+split_spec_fname)
 	split_path = path_to_folders + '/crossval_splits/' + split_spec_fname[:-4]
@@ -330,25 +327,6 @@ def specified_cv_split(split_spec_fname, path_to_folders = 'Data/Multitask_data/
 		y,x,w,m = split_df_by_col_type(train_df,col_types)
 		yxwm_to_csvs(y,x,w,m,split_path+'/cv_'+str(i),'train')
 
-	# settype = 'train'
-	# y_vals.to_csv(path_to_splits + '/' + settype + '.csv', index = False)
-	# x_vals.to_csv(path_to_splits + '/' + settype + '_extra_x.csv', index = False)
-	# weights.to_csv(path_to_splits + '/' + settype + '_weights.csv', index = False)
-	# metadata_cols.to_csv(path_to_splits + '/' + settype + '_metadata.csv', index = False)
-
-	# settype = 'valid'
-	# y_vals_v.to_csv(path_to_splits + '/' + settype + '.csv', index = False)
-	# x_vals_v.to_csv(path_to_splits + '/' + settype + '_extra_x.csv', index = False)
-	# weights_v.to_csv(path_to_splits + '/' + settype + '_weights.csv', index = False)
-	# metadata_cols_v.to_csv(path_to_splits + '/' + settype + '_metadata.csv', index = False)
-
-	# y_vals,x_vals,weights,metadata_cols = split_df_by_col_type(test_df,col_types)
-	# settype = 'test'
-	# y_vals.to_csv(path_to_splits + '/' + settype + '.csv', index = False)
-	# x_vals.to_csv(path_to_splits + '/' + settype + '_extra_x.csv', index = False)
-	# weights.to_csv(path_to_splits + '/' + settype + '_weights.csv', index = False)
-	# metadata_cols.to_csv(path_to_splits + '/' + settype + '_metadata.csv', index = False)
-
 def yxwm_to_csvs(y, x, w, m, path,settype):
 	# y is y values
 	# x is x values
@@ -363,6 +341,7 @@ def yxwm_to_csvs(y, x, w, m, path,settype):
 
 def specified_dataset_split(split_spec_fname, path_to_folders = 'Data/Multitask_data/All_datasets', is_morgan = False):
 	# 3 columns: Data_type, Value, Split_type
+	# Splits the dataset according the the split specifications
 	all_df = pd.read_csv(path_to_folders + '/all_data.csv')
 	split_df = pd.read_csv(path_to_folders + '/Split_specs/' + split_spec_fname)
 	split_path = path_to_folders + '/Splits/' + split_spec_fname[:-4]
@@ -372,11 +351,8 @@ def specified_dataset_split(split_spec_fname, path_to_folders = 'Data/Multitask_
 	train_df = pd.DataFrame({})
 	valid_df = pd.DataFrame({})
 	test_df = pd.DataFrame({})
-	# print(all_df.columns)
 	for index,row in split_df.iterrows():
-		# print(all_df.columns)
 		print(row)
-		# print(row['Data_type_for_component'])
 		dtypes = row['Data_types_for_component'].split(',')
 		vals = row['Values'].split(',')
 		df_to_concat = all_df
@@ -384,7 +360,6 @@ def specified_dataset_split(split_spec_fname, path_to_folders = 'Data/Multitask_
 			print(len(df_to_concat))
 			df_to_concat = df_to_concat[df_to_concat[dtype.strip()]==vals[i].strip()].reset_index(drop = True)
 		print(len(df_to_concat))
-		# if row['Data_type_for_split'] == 'random':
 
 		values_to_split = df_to_concat[row['Data_type_for_split']]
 		unique_values_to_split = list(set(values_to_split))
@@ -396,15 +371,6 @@ def specified_dataset_split(split_spec_fname, path_to_folders = 'Data/Multitask_
 		train_df = pd.concat([train_df,df_to_concat[df_to_concat[row['Data_type_for_split']].isin(train_unique)]])
 		valid_df = pd.concat([valid_df,df_to_concat[df_to_concat[row['Data_type_for_split']].isin(valid_unique)]])
 		test_df = pd.concat([test_df,df_to_concat[df_to_concat[row['Data_type_for_split']].isin(test_unique)]])
-		# if row.Split_type == 'test':
-		# 	test_df = pd.concat([test_df,df_to_concat], ignore_index = True)
-		# elif row.Split_type == 'train':
-		# 	train_df = pd.concat([train_df,df_to_concat], ignore_index = True)
-		# else:
-		# 	print('Split_type ',row['Split_type'], ' doesn\'t exist, it\'s only \'test\' or \'train\'')
-		# print(test_df.head())
-		# print(train_df.head())
-	# train_df, valid_df = train_test_split(train_df, test_size = 0.2, random_state = 51)
 	train_test_valid_dfs_to_csv(split_path, train_df, valid_df, test_df, path_to_folders)
 
 def all_randomly_split_dataset(path_to_folders = 'Data/Multitask_data/All_datasets'):
@@ -418,6 +384,7 @@ def all_randomly_split_dataset(path_to_folders = 'Data/Multitask_data/All_datase
 
 
 def train_test_valid_dfs_to_csv(path_to_splits, train_df, valid_df, test_df, path_to_col_types):
+	# Sends the training, validation, and test dataframes to csv as determined by the column types
 	col_types = pd.read_csv(path_to_col_types + '/col_type.csv')
 
 	y_vals,x_vals,weights,metadata_cols = split_df_by_col_type(train_df,col_types)
@@ -466,6 +433,7 @@ def run_ensemble_training(path_to_folders, ensemble_size = 5, epochs = 40, gener
 		os.rename(path_to_folders+'/trained_model',path_to_folders + '/trained_model_'+str(i))
 
 def run_optimized_ensemble_training(path_to_folders, ensemble_size = 5, epochs = 40, generator = None, path_to_hyperparameters = None):
+	# Runs training according to the hyperparameter-optimized configurations identified in path_to_hyperparameters (or just path_to_folders if path_to_hyperparameters is not specified)
 	if path_to_hyperparameters == None:
 		opt_hyper = json.load(open(path_to_folders + '/hyperopt/optimized_configs.json','r'))
 	else:
@@ -476,6 +444,7 @@ def run_optimized_ensemble_training(path_to_folders, ensemble_size = 5, epochs =
 		os.rename(path_to_folders+'/trained_model',path_to_folders + '/trained_model_'+str(i))
 
 def run_all_trainings(path_to_splits = 'Data/Multitask_data/All_datasets'):
+	# Do all trainings listed in Split_specs
 	all_csvs = os.listdir(path_to_splits+'/Split_specs')
 	for csv in all_csvs:
 		if csv.endswith('.csv'):
@@ -558,6 +527,7 @@ def combine_predictions(splits,combo_name, path_to_folders = 'Data/Multitask_dat
 
 
 def ensemble_predict(path_to_folders = 'Data/Multitask_data/All_datasets/Splits', ensemble_size = 5, predictions_done = [], path_to_new_test = '',standardize_predictions = True):
+	# Makes predictions based on the ensemble model
 	if path_to_new_test == '':
 		path_to_data_folders = path_to_folders
 		addition = ''
@@ -608,18 +578,8 @@ def ensemble_predict(path_to_folders = 'Data/Multitask_data/All_datasets/Splits'
 	all_predictions.to_csv(path_to_folders+'/Predicted_vs_actual'+path_to_new_test+'.csv', index = False)
 
 def predict_each_test_set_cv(path_to_folders = 'Data/Multitask_data/All_datasets/crossval_splits', ensemble_size = 5, predictions_done = [], path_to_new_test = '',standardize_predictions = True):
-	# if path_to_new_test == '':
-	# 	path_to_data_folders = path_to_folders
-	# 	addition = ''
-	# 	all_predictions_fname = path_to_folders+'/Predicted_vs_actual'+path_to_new_test+'.csv'
-	# path_to_data_folders = path_to_folders + '/in_silico_screens/'+path_to_new_test
-	# path_if_none(path_to_folders+'/in_silico_screen_results')
-	# all_predictions_fname = path_to_folders+'/in_silico_screen_results/'+path_to_new_test+'.csv'
-	# all_predictions = pd.read_csv(path_to_data_folders + '/test.csv')
-	# pred_names = list(all_predictions.columns)
-	# pred_names.remove('smiles')
-	# metadata = pd.read_csv(path_to_data_folders +'/test_metadata.csv')
-	# all_predictions = pd.concat([metadata, all_predictions], axis = 1)
+	# Makes predictions on each test set in a cross-validation-split system
+	# Not used for screening a new library, used for predicting on the test set of the existing dataset
 	for i in range(ensemble_size):
 		# try:
 		# 	current_predictions = pd.read_csv(path_to_folders+'/trained_model_'+str(i)+'/Predictions/test_predictions'+addition+'.csv')
@@ -649,30 +609,11 @@ def predict_each_test_set_cv(path_to_folders = 'Data/Multitask_data/All_datasets
 				current_predictions.rename(columns = {col:('cv_'+str(i)+'_pred_'+col)}, inplace = True)
 			output = pd.concat([output, current_predictions], axis = 1)
 			output.to_csv(path_to_folders+'/cv_'+str(i)+'/Predicted_vs_actual.csv', index = False)
-	# avg_pred = [[] for _ in pred_names]
-	# stdev_pred = [[] for _ in pred_names]
-	# # (root squared error)
-	# rse = [[] for _ in pred_names]
-	# all_predictions.to_csv(path_to_folders+'/Predicted_vs_actual'+path_to_new_test+'.csv', index = False)
-	# for index, row in all_predictions.iterrows():
-	# 	for i,pname in enumerate(pred_names):
-	# 		all_preds = [row['m'+str(k)+'_pred_'+pname] for k in range(ensemble_size)]
-	# 		avg_pred[i].append(np.mean(all_preds))
-	# 		stdev_pred[i].append(np.std(all_preds, ddof = 1))
-	# 		if path_to_new_test=='':
-	# 			rse[i].append(np.sqrt((row[pname]-np.mean(all_preds))**2))
-	# for i, pname in enumerate(pred_names):
-	# 	all_predictions['Avg_pred_'+pname] = avg_pred[i]
-	# 	all_predictions['Std_pred_'+pname] = stdev_pred[i]
-	# 	if path_to_new_test == '':
-	# 		all_predictions['RSE_'+pname] = rse[i]
-	# all_predictions.to_csv(all_predictions_fname, index = False)
 
 def ensemble_predict_cv(path_to_folders = 'Data/Multitask_data/All_datasets/crossval_splits', ensemble_size = 5, predictions_done = [], path_to_new_test = '',standardize_predictions = True):
-	# if path_to_new_test == '':
-	# 	path_to_data_folders = path_to_folders
-	# 	addition = ''
-	# 	all_predictions_fname = path_to_folders+'/Predicted_vs_actual'+path_to_new_test+'.csv'
+	# Makes predictions on a new test set path_to_new_test (i.e. perform a screen on data stored in /in_silico_screen_results)
+	# with ensemble model from cross-validation
+	# i.e. this does the in silico screen of a new thing
 	if not path_to_new_test == '':
 		addition = '_'+path_to_new_test
 		path_to_data_folders = path_to_folders + '/in_silico_screens/'+path_to_new_test
@@ -726,53 +667,13 @@ def ensemble_predict_cv(path_to_folders = 'Data/Multitask_data/All_datasets/cros
 	all_predictions.to_csv(all_predictions_fname, index = False)
 
 def make_predictions_cv(path_to_folders = 'Data/Multitask_data/All_datasets/Splits', path_to_new_test = '', ensemble_number = -1):
-	print('PATH TO FOLDERS: ',path_to_folders)
+	# Make predictions
 	predict_folder = path_to_folders + '/trained_model/Predictions'
 	if ensemble_number>-0.5:
 		predict_folder = path_to_folders +'/cv_'+str(ensemble_number)+ '/trained_model/Predictions'
 	path_if_none(predict_folder)
-	print('PATH TO FOLDERS: ',path_to_folders)
 	predict_multitask_from_json_cv(get_base_predict_args(),model_path = path_to_folders, path_to_new_test = path_to_new_test, ensemble_number = ensemble_number)
 
-
-def reanalyze_classification_predictions(split_name, path_to_preds = 'Data/Multitask_data/All_datasets'):
-	perf_summary = pd.read_csv(path_to_preds+'/Splits/'+split_name+'/Results/Performance_summary.csv')
-	custom_aucs = []
-	for index, row in perf_summary.iterrows():
-		value_cutoff = row['Value_cutoff']
-		if np.isnan(value_cutoff):
-			custom_aucs.append('n/a')
-		else:
-			print(value_cutoff)
-			pred_split_name = row['Analysis']
-			dtype = row['Measurement_type']
-			analyzed_path = path_to_preds+'/Splits/'+split_name+'/Results/'+pred_split_name+'/'+dtype
-			data_df = pd.read_csv(analyzed_path+'/pred_vs_actual_data.csv')
-			analyzed_vbl = data_df[dtype]
-			if row['Goal'] == 'max':
-				classes = [vbl>value_cutoff for vbl in analyzed_vbl]
-				predictions = data_df['Avg_pred_'+dtype]
-			elif row['Goal']=='min':
-				classes = [vbl<value_cutoff for vbl in analyzed_vbl]
-				predictions = [-v for v in data_df['Avg_pred_'+dtype]]
-			try:
-				auc_score = roc_auc_score(classes, predictions)
-			except:
-				auc_score = np.nan
-			custom_aucs.append(auc_score)
-			data_df[('Is_hit_by_cutoff_%0.2f_'%value_cutoff) + dtype] = classes
-			data_df.to_csv(analyzed_path + '/pred_vs_actual_data.csv', index = False)
-			fpr, tpr, thresholds = roc_curve(classes,predictions)
-			plt.figure()
-			plt.plot(fpr, tpr, color = 'black', label = 'ROC curve cutoff %0.2f'%value_cutoff +' (area = %0.2f)' % auc_score)
-			plt.plot([0,1],[0,1],color = 'blue',linestyle = '--')
-			plt.xlim([0.0,1.0])
-			plt.ylim([0.0,1.05])
-			plt.xlabel('False positive rate')
-			plt.ylabel('True positive rate')
-			plt.legend(loc = 'lower right')
-			plt.savefig(analyzed_path + '/custom_roc_curve.png')
-			plt.close()
 
 def analyze_new_lipid_predictions(split_name, addition = '_in_silico',path_to_preds = 'Data/Multitask_data/All_datasets'):
 	preds_vs_actual = pd.read_csv(path_to_preds + '/Splits/'+split_name+'/Predicted_vs_actual'+addition+'.csv')
