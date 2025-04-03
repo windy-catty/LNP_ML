@@ -1,0 +1,160 @@
+## 
+
+# 中科院脂质大分子药物递送性能预测
+
+- **聚读标注：论文仿真**
+
+————
+
+我们前几天和巫教授团队对接了下，现在我们打算先试着复现一下这篇论文的方法，
+
+代码和数据集在https://github.com/jswitten/LNP_ML﻿可以下载到
+
+- 我这边的话了解下这个分子动力学计算部分需要的算力和时间，
+- 你这边的话试着跑一跑文献的代码，期间有什么问题我们一起沟通下
+- 复现之后我们再讨论下如何（特别是引入LLM）去优化这个模型
+
+这个复现的话数据和代码都有，（没碰上坑的话）估计1~2天内能搞定
+
+主要结合这个例子加深对这类数据处理/应用方式的理解，以及了解他们方法的可改进之处
+
+————
+
+OK，那么我总结下：这个文章提出的方法，输入主要包含可电离脂质结构以及相关元数据，譬如颗粒的配方细节，携带的mRNA，以及（某一个）靶细胞/组织类型；输出预测的mRNA递送效率/活性（也就是说不仅仅指送到目标处，还要在目标处成功表达）
+
+
+
+![img](https://static.dingtalk.com/media/lQLPJyGqODOBpivNAnTNBRywcLoMuSziqKwH0EfXIBcUAQ_1308_628.png)
+
+（分子动力学数据计算资源需求大，计算时间长，先忽略这个部分）
+
+
+
+目标：巫教授团队认为在此基础上，输出时如果能额外考虑mRNA到不同器官的递送效率，可以进一步证明某种递送方式的靶向性；此外他们也提出模型可以也预测mRNA的包封率（可以近似理解为下图这个小球包了几个mRNA）和安全性
+
+![img](https://static.dingtalk.com/media/lQLPKGl3eg2aRyvNAnTNA7qwTj1KyDv9w1YH0EfXIBcUAg_954_628.png)
+
+
+
+数据：他们团队自己也产生了一些（含不同器官的递送效率的）实验数据（200个左右，加上LNP的变化大概300-400个），他们预计到时候会作为测试集
+
+
+
+那么模型需要的输入输出就变成了这样：
+
+![img](https://static.dingtalk.com/media/lQLPJw_mvvuhJivNAqrNBYSw5Ake88HvneYH0EfXIBcUAA_1412_682.png)
+
+
+
+我的理解是这里面的包封率受不同的 类脂-LNP配方 影响，其自身又最终影响了到不同器官的递送效率，算是个中间变量。
+
+他们预期构建的模型不似我们以往做的，在输入输出不变的情况下，超越现有方法的准确率/运行效率之类的，而是通过增加输出数据的丰富度，使模型更具应用意义。
+
+
+
+那么我们会面临的挑战有：
+
+0. 各器官的靶向效率如何量化？虽然看起来PPT里面写的各器官数据加和为1，但只是个初步的想法（这个相对专业，后面得和他们讨论下）
+1. 数据量少，公开数据基本都没有在不同器官的靶向效率，自有数据在200-400个左右（用于传统模型训练很容易有过拟合之类的问题）
+2. 针对问题1，我们有个想法是能否直接利用LLM的能力来预测。LLM在定量预测方面的应用还比较少，有什么方法/prompt能使其稳健地用于定量预测吗？
+
+————
+
+阅读论文，复现该论文的详细步骤及注意事项：
+
+###### **第一阶段：环境准备与数据验证【详见README】**
+
+1. **代码库克隆与依赖安装**
+
+```python
+git clone https://github.com/jswitten/LNP_ML.git
+
+conda create -n lnp_ml python=3.8
+conda activate lnp_ml
+pip install chemprop==1.7.0
+```
+
+2. **数据集完整性验证**
+
+```python
+LNP_ML/
+├── data/                           # 原始数据存储
+│   ├── all_data.csv                # 合并后的完整数据集（>9,000条，论文图1a来源）
+│   ├── all_data_for_paper.csv      # 论文分析子集（对应Supplementary Table 1）
+│   │
+│   ├── data_files_to_merge/        # 新增数据集目录
+│   │   ├── {dataset_name}/
+│   │   │   ├── main_data.csv       # SMILES+递送效率（必需）
+│   │   │   ├── formulations.csv    # 配方参数（如35:16:46.5:2.5摩尔比/质量比）
+│   │   │   └── individual_metadata.csv # 有关测量的所有其他可选数据（图4实验条件）
+│   │
+│   └── crossval_split_specs/       # 数据分割配置
+│       └── all_amine_split.csv     # 训练测试分割规则（论文图1g关键）
+│
+├── scripts/                       # 核心代码
+│   └── main_script.py              # 主流程控制（合并/分割/训练/预测）
+│
+└── results/                       # 输出结果
+    ├── crossval_splits/            # 交叉验证结果
+    │   ├── all_amine_split_for_paper/
+    │   │   ├── crossval_performance/
+    │   │   │   └── pearson.csv     # 各数据集Pearson R值（直接生成图1g）
+    │   │   └── cv_[0-4]/           # 单折预测结果
+    │   │       └── predicted_vs_actual.csv  # 预测vs实验值（散点图数据源）
+    │   │
+    │   └── ultra_held_out/         # 超外推测试集（若启用）
+    │
+    └── screen_results/             # 虚拟筛选输出
+        ├── {model_name}/
+           ├── cv_x_preds.csv      # 单模型预测（用于不确定性评估）
+          └── pred_file.csv       # 最终预测排名（FO-32发现结果，图3）
+```
+
+###### **第二阶段：模型训练与基线复现【已完成】**
+
+1. **LION模型拆分、训练、测试、评估**
+
+```python
+# 拆分训练集测试集，根据给定拆分文件名中指定的拆分生成五重交叉验证拆分
+python main_script.py split {split filename} ultra-held-out-fraction {either "-1" or “morgan”} {either nothing or “in_silico_screen_split”}
+python main_script.py split all_amine_split_for_paper.csv -1
+# ultra-held-out-fraction 是您希望在所有交叉验证集中保留的数据分数。这对于报告基于所有交叉验证拆分的集成平均值的预测错误非常有用。如果您不需要超保持数据集，请将其设置为 -1。
+# 如果指定 morgan，则将包含二进制 Morgan 指纹（半径 2,2048 位）。如果选择 in_silico_screen_split，则训练集和验证集将相同，即每个模型将使用 80% 的数据进行训练，其余 20% 用作验证集，并报告结果模型的性能（略有偏差）。对于用于进行计算机筛选的实际模型，应选择此选项，因为它使用 80% 而不是 60% 的数据进行训练。
+```
+
+```python
+# 训练模型
+python main_script.py train {name of split folder on which to train}
+python main_script.py train all_amine_split_for_paper
+# 训练的 epoch 数也可以用 --epochs {number of epochs} 指定。
+# 如果文件夹名称以 Morgan 结尾：模型将包含半径为 2、2048 位的二进制 Morgan 指纹。
+```
+
+```python
+# 测试模型性能
+python main_script.py analyze {folder with trained model}
+python main_script.py analyze all_amine_split_for_paper
+# 这将在 results/crossval_splits 中创建一个文件夹，其名称为包含拆分和训练模型的文件夹，该模型包含交叉验证的五个测试集的分析结果。该文件夹将包含六个子文件夹。
+```
+
+```python
+# 运行计算机模拟筛选
+python main_script.py predict {folder with trained model} {folder with LNPs to screen}
+python main_script.py predict all_amine_split test_screen
+# 包含要筛选的 SMILES 列表的文件夹应位于 data/libraries/{folder} 中，并且应包含三个文件，test_screen.csv、test_screen_extra_x.csv 和 test_screen_metadata.csv，分别保存您正在筛选的 SMILES、extra_x 值（即配方参数）和屏幕各行的元数据。请注意，要运行筛选，必须指定公式参数。
+```
+
+```python
+# 把它们放在一起，拆分、训练、测试、评估
+python main_script.py split small_test_split.csv 0.2 in_silico_screen_split
+python main_script.py train small_test_split_with_ultra_held_out_for_in_silico_screen –epochs 3
+python main_script.py analyze small_test_split_with_ultra_held_out_for_in_silico_screen
+python main_script.py predict small_test_split_with_ultra_held_out_for_in_silico_screen test_screen
+```
+
+2. **LION模型基线复现**
+
+- *预期输出*：验证集Pearson R >0.6（接近论文图1f）
+
+- *检查点*：对比5折CV结果与论文Supplementary Fig. 27的误差范围（±0.1 R²）
+

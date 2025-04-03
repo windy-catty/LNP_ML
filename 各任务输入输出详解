@@ -1,0 +1,186 @@
+# 各任务输入输出详解
+
+### **模型输入（Inputs）**
+
+#### **1. 核心特征**
+
+| 变量名/字段           | 数据类型 | 来源文件/代码位置           | 说明                                               |
+| :-------------------- | :------- | :-------------------------- | :------------------------------------------------- |
+| `smiles`              | 字符串   | `train.csv`/`test.csv`      | 脂质分子的SMILES表达式（如`C#CC(C)(C)CC(=O)N...`） |
+| `quantified_delivery` | 浮点数   | `train.csv`（仅训练时使用） | 标准化后的实验递送效率值（z-score）                |
+
+#### **2. 配方元数据** (`*_extra_x.csv`)
+
+| 变量名                     | 示例值 | 作用                                    |
+| :------------------------- | :----- | :-------------------------------------- |
+| `Cationic_Lipid_Mol_Ratio` | 35.0   | 阳离子脂质摩尔百分比（如KK配方中的35%） |
+| `Helper_lipid_ID_DOPE`     | 1      | 二元标记是否含DOPE辅助脂质              |
+| `PEG_Lipid_Mol_Ratio`      | 2.5    | PEG脂质的摩尔百分比                     |
+
+#### **3. 实验条件** (`*_metadata.csv`)
+
+| 变量名                                | 类型   | 示例值 | 说明                        |
+| :------------------------------------ | :----- | :----- | :-------------------------- |
+| `Delivery_target_lung`                | 二进制 | 1      | 标记是否为肺靶向实验（图4） |
+| `Route_of_administration_intravenous` | 二进制 | 0      | 标记给药途径（静脉/肌肉等） |
+
+------
+
+### **模型输出（Outputs）**
+
+#### **1. 训练阶段**
+
+| 变量名/文件字段            | 数据类型 | 存储位置      | 说明                  |
+| :------------------------- | :------- | :------------ | :-------------------- |
+| `mean_score`（控制台输出） | 浮点数   | 训练日志      | 交叉验证的平均RMSE    |
+| `model.pt`                 | 二进制   | `cv_i/`文件夹 | 保存的PyTorch模型文件 |
+
+#### **2. 预测阶段**
+
+| 变量名/文件字段                             | 数据类型 | 存储位置         | 论文关联                         |
+| :------------------------------------------ | :------- | :--------------- | :------------------------------- |
+| **`quantified_delivery`**                   | 浮点数   | `cv_i_preds.csv` | 单折预测的标准化递送效率         |
+| **`avg_pred_delivery`**                     | 浮点数   | `pred_file.csv`  | 五折平均预测值（图3h-j筛选结果） |
+| `cv_0_pred_delivery`...`cv_4_pred_delivery` | 浮点数   | `pred_file.csv`  | 各折独立预测值（不确定性评估）   |
+
+————
+
+### **1. 输入参数结构**
+
+所有任务均通过命令行参数调用，基本格式为：
+
+bash
+
+复制
+
+```
+python main_script.py <task_type> <task_specific_args...>
+```
+
+#### **通用参数**
+
+| 参数位置  | 变量名                          | 含义                        |
+| :-------- | :------------------------------ | :-------------------------- |
+| `argv[1]` | `task_type`                     | 任务类型（train/predict等） |
+| `argv[2]` | `split_folder` 或 `screen_name` | 数据分割名或筛选任务名      |
+
+------
+
+### **2. 各任务输入输出详解**
+
+#### **① 训练任务 (`task_type == 'train'`)**
+
+```
+python main_script.py train <split_folder> [--epochs N]
+```
+
+**输入**：
+
+- `split_folder`：交叉验证分割目录（如`all_amine_split_for_paper`）
+- `--epochs`：可选训练轮数（默认50）
+
+**关键文件输入**：
+
+| 文件路径模式                                                 | 内容         |
+| :----------------------------------------------------------- | :----------- |
+| `../data/crossval_splits/{split_folder}/cv_{i}/train.csv`    | 训练集SMILES |
+| `../data/crossval_splits/{split_folder}/cv_{i}/train_extra_x.csv` | 配方元数据   |
+
+**输出**：
+
+| 文件路径模式                                             | 内容             |
+| :------------------------------------------------------- | :--------------- |
+| `../data/crossval_splits/{split_folder}/cv_{i}/model.pt` | 训练好的模型     |
+| 控制台输出                                               | 每折的RMSE和R²值 |
+
+------
+
+#### **② 预测任务 (`task_type == 'predict'`)**
+
+```
+python main_script.py predict <model_folder> <screen_name>
+```
+
+**输入**：
+
+- `model_folder`：训练好的模型目录（如`all_amine_split_for_paper`）
+- `screen_name`：待筛选脂质库名（需提前放在`data/libraries/`下）
+
+**关键文件输入**：
+
+| 文件路径                                                    | 内容         |
+| :---------------------------------------------------------- | :----------- |
+| `../data/libraries/{screen_name}/{screen_name}.csv`         | 待预测SMILES |
+| `../data/libraries/{screen_name}/{screen_name}_extra_x.csv` | 配方参数     |
+
+**输出**：
+
+| 文件路径                                                     | 内容                                  |
+| :----------------------------------------------------------- | :------------------------------------ |
+| `../results/screen_results/{model_folder}_preds/{screen_name}/pred_file.csv` | 最终预测结果（含`avg_pred_delivery`） |
+| `cv_{i}_preds.csv`                                           | 单折预测结果                          |
+
+------
+
+#### **③ 数据分割 (`task_type == 'split'`)**
+
+```
+python main_script.py split <split_name> <ultra_held_out> [morgan] [in_silico_screen_split]
+```
+
+**输入**：
+
+- `split_name`：分割配置文件名（如`all_amine_split.csv`）
+- `ultra_held_out`：保留数据比例（-1表示不保留）
+- `morgan`：可选是否添加Morgan指纹
+- `in_silico_screen_split`：是否为虚拟筛选优化分割
+
+**关键文件输入**：
+
+| 文件路径                                        | 内容         |
+| :---------------------------------------------- | :----------- |
+| `../data/crossval_split_specs/{split_name}.csv` | 分割规则配置 |
+
+**输出**：
+
+| 文件路径                                       | 内容              |
+| :--------------------------------------------- | :---------------- |
+| `../data/crossval_splits/{split_name}/cv_{i}/` | 生成的5折数据分割 |
+
+------
+
+#### **④ 超参优化 (`task_type == 'hyperparam_optimize'`)**
+
+```
+python main_script.py hyperparam_optimize <split_folder>
+```
+
+**输出**：
+
+| 文件路径                                  | 内容             |
+| :---------------------------------------- | :--------------- |
+| `../results/{split_folder}/hyp_cv_0.json` | 优化后的超参配置 |
+
+------
+
+#### **⑤ 数据分析 (`task_type == 'analyze'`)**
+
+```
+python main_script.py analyze <split_folder>
+```
+
+**输出**：
+
+| 文件路径                                                     | 内容                |
+| :----------------------------------------------------------- | :------------------ |
+| `../results/crossval_splits/{split_folder}/crossval_performance/pearson.csv` | 各数据集Pearson R值 |
+
+------
+
+### **3. 核心变量映射表**
+
+| 代码变量              | 对应文件字段                | 论文关联     |
+| :-------------------- | :-------------------------- | :----------- |
+| `quantified_delivery` | `main_data.csv`中的递送效率 | 模型预测目标 |
+| `avg_pred_delivery`   | `pred_file.csv`中的平均值   | 图3脂质排名  |
+| `cv_i_pred_delivery`  | 单折预测文件                | 不确定性评估 |

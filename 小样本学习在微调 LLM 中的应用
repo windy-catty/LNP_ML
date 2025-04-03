@@ -1,0 +1,123 @@
+# 小样本学习在微调 LLM 中的应用
+
+针对小样本条件下，预测mRNA递送效率的需求，替代深度学习的方案及LLM定量预测的具体方法
+
+### **一、LLM定量预测的实践方法**
+
+#### **1. 微调策略（200-400样本适用）**
+
+**方案**：
+
+- **Adapter微调**：在预训练LLM（如Galactica）上添加回归头
+
+  ```
+  from transformers import AutoModelForSequenceClassification
+  
+  model = AutoModelForSequenceClassification.from_pretrained(
+      "facebook/galactica-1.3b",
+      num_labels=1,  # 回归任务
+      problem_type="regression"
+  )
+  # 输入格式：[SMILES]|Formulation:DOPE=16|Target:liver
+  ```
+
+- **训练技巧**：
+
+  - 学习率：3e-5（比常规分类小10倍）
+  - 损失函数：Huber loss（抗噪声）
+
+#### **2. 少样本提示工程**
+
+**模板设计**：
+
+```
+prompt = """
+你是一个生物医药专家，需要预测脂质纳米颗粒的器官靶向效率。已知：
+1. SMILES:C#CC(C)(C)CC(=O)N(CCCN)C(=O)C(CCCC)O, 配方:DOPE=16, 肝脏效率:0.65, 肺效率:0.20
+2. SMILES:CN(C)CCNC(=O)C(CCCC)O, 配方:DOTAP=20, 肝脏效率:0.50, 肺效率:0.30
+
+请预测以下分子的效率：
+SMILES: {input_smiles}, 配方:{formulation}
+以严格JSON格式输出，包含liver和lung两个键，值保留两位小数。
+"""
+```
+
+**输出控制**：
+
+```
+# 添加后处理校验
+def validate_output(text):
+    try:
+        data = json.loads(text)
+        assert 0.99 < sum(data.values()) < 1.01  # 总和≈1
+        return data
+    except:
+        return {"liver": 0.7, "lung": 0.3}  # 默认值
+```
+
+#### **3. 混合架构（推荐）**
+
+**流程**：
+
+1. **LLM作为特征提取器**：
+
+   ```
+   # 使用LLaMA-2生成分子描述
+   desc_prompt = "用50字描述SMILES为{C#CC...}的脂质可能靶向的器官及原因"
+   description = llama2.generate(desc_prompt)
+   ```
+
+2. **传统模型预测**：
+
+   ```
+   # 结合描述文本特征和分子描述符
+   text_feature = sentence_transformer.encode(description)
+   combined_feature = np.concatenate([text_feature, mol_descriptor])
+   xgb_regressor.predict(combined_feature)
+   ```
+
+------
+
+### **二、方案对比与推荐**
+
+| 方法                 | 所需数据量 | 可解释性 | 实现难度 | 预估R² (400样本) |
+| :------------------- | :--------- | :------- | :------- | :--------------- |
+| GBRT+描述符          | 200+       | ★★★★     | ★★       | 0.4-0.5          |
+| 图核SVR              | 300+       | ★★       | ★★★      | 0.3-0.4          |
+| LLM微调              | 500+       | ★        | ★★★★     | 0.5-0.6          |
+| **LLM提示+传统模型** | **200+**   | **★★★**  | **★★★**  | **0.5-0.7**      |
+
+------
+
+### **三、实施建议**
+
+1. **优先尝试混合架构**：
+   - 用ChatGPT生成分子-器官关联描述
+   - 使用XGBoost结合文本特征和RDKit描述符
+2. **数据增强技巧**：
+   - 对SMILES进行立体异构体枚举（如`C=CC` → `C/C=C/C`）
+   - 基于已有400样本做配方比例的插值生成
+3. **验证策略**：
+   - 留出20%雪貂数据作为最终测试集
+   - 使用Bootstrapping评估小样本下的稳定性
+
+**示例代码**：
+
+```
+# 混合模型预测示例
+smiles = "C#CC(C)(C)CC(=O)N(CCCN)C(=O)C(CCCC)O"
+formulation = "DOPE=16,Chol=45"
+
+# Step1: LLM生成描述
+desc = chatgpt.predict(f"Describe targeting behavior of {smiles} with {formulation}")
+
+# Step2: 特征组合
+text_embed = sentence_transformer.encode(desc)
+mol_feat = rdkit_descriptors(smiles)
+features = np.concatenate([text_embed, mol_feat])
+
+# Step3: 预测
+efficiency = xgb_model.predict([features])[0]
+```
+
+该方法在保持可解释性的同时，相比纯深度学习方案更适合小数据场景，且能利用LLM的生化先验知识。
